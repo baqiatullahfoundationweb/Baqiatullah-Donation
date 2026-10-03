@@ -14,6 +14,7 @@ import HeroSlideshow from './components/HeroSlideshow';
 import OptimizedImage from './components/OptimizedImage';
 import SocialLinks from './components/SocialLinks';
 import Preloader from './components/Preloader';
+import { useTheme } from './context/ThemeContext';
 
 L.Icon.Default.mergeOptions({ iconRetinaUrl: markerIcon2x, iconUrl: markerIcon, shadowUrl: markerShadow });
 
