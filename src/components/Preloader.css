@@ -1,0 +1,35 @@
+.preloader { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; min-height: 100dvh; overflow: hidden; background: linear-gradient(135deg, #0B0F10, #101a1a); color: #fff; perspective: 1400px; isolation: isolate; }
+.preloader-radial { position: absolute; inset: 16% 12%; z-index: -1; border-radius: 50%; background: radial-gradient(circle, rgba(14, 154, 148, .32), rgba(14, 154, 148, .08) 38%, transparent 70%); filter: blur(10px); animation: preloader-pulse 2.8s ease-in-out infinite; }
+.preloader-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.preloader-particles i { position: absolute; bottom: -5%; display: block; width: var(--particle-size, 3px); height: var(--particle-size, 3px); border-radius: 50%; background: #8bd9d3; opacity: .18; animation: particle-rise var(--particle-duration, 4s) var(--particle-delay, 0s) linear infinite; }
+.preloader-stage { position: relative; z-index: 6; display: grid; place-items: center; width: min(80vw, 600px); height: min(62vh, 520px); transform-style: preserve-3d; }
+.preloader-glow { position: absolute; width: clamp(220px, 42vw, 480px); aspect-ratio: 1; border-radius: 50%; background: rgba(14, 154, 148, .2); filter: blur(48px); transform: translateZ(-80px); }
+.preloader-logo-wrap { position: relative; display: grid; place-items: center; width: clamp(160px, 28vw, 340px); aspect-ratio: 1; transform-style: preserve-3d; will-change: transform, opacity, filter; }
+.preloader-logo { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 18px 22px rgba(0, 0, 0, .28)); transform: translateZ(60px); }
+.preloader-shine { position: absolute; inset: -20% 35%; z-index: 2; display: block; width: 22%; transform: skewX(-22deg); background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6), transparent); mix-blend-mode: screen; pointer-events: none; }
+.preloader-shadow { position: absolute; bottom: 7%; width: clamp(110px, 19vw, 220px); height: clamp(16px, 3vw, 28px); border-radius: 50%; background: rgba(0, 0, 0, .42); filter: blur(14px); }
+.preloader-meta { position: absolute; bottom: 12%; z-index: 6; display: grid; grid-template-columns: auto minmax(90px, 190px) auto; align-items: center; gap: 12px; color: #a9d9d5; font-size: 9px; letter-spacing: .16em; }
+.preloader-meta small { font-size: 9px; letter-spacing: .08em; color: #fff; }
+.preloader-progress { width: 100%; height: 2px; background: rgba(255, 255, 255, .18); }
+.preloader-progress i { display: block; height: 100%; background: #0E9A94; transition: width .1s linear; }
+.preloader-skip { position: absolute; right: clamp(18px, 4vw, 52px); bottom: clamp(18px, 4vw, 42px); z-index: 8; padding: 8px 10px; border: 1px solid rgba(255,255,255,.16); border-radius: 4px; background: transparent; color: #fff; font-size: 11px; cursor: pointer; transition: opacity .2s, border-color .2s; }
+.preloader-skip:hover, .preloader-skip:focus-visible { opacity: 1 !important; border-color: #0E9A94; }
+.preloader-curtain { position: absolute; top: 0; bottom: 0; z-index: 5; width: 50%; background: #0B0F10; transition: transform .85s cubic-bezier(.76, 0, .24, 1); pointer-events: none; }
+.curtain-left { left: 0; }.curtain-right { right: 0; }.curtain-left.is-open { transform: translateX(-100%); }.curtain-right.is-open { transform: translateX(100%); }
+
+@keyframes preloader-pulse { 0%, 100% { opacity: .55; transform: scale(.94); } 50% { opacity: .95; transform: scale(1.08); } }
+@keyframes particle-rise { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(18px, -115vh, 0); } }
+
+@media (max-width: 600px) {
+  .preloader-radial { filter: blur(24px); }
+  .preloader-stage { width: 100vw; height: 58vh; }
+  .preloader-meta { bottom: 15%; grid-template-columns: minmax(0, 1fr) auto; width: min(80vw, 300px); }
+  .preloader-meta span { grid-column: 1 / -1; text-align: center; }
+  .preloader-meta small { text-align: right; }
+  .preloader-particles i:nth-child(n+15) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preloader-radial, .preloader-particles i { animation: none; }
+  .preloader-curtain { transition-duration: .35s; }
+}
