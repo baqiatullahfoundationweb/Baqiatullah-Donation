@@ -4,18 +4,13 @@ import './Preloader.css';
 
 export const PRELOADER_CONFIG = {
   colors: { background: '#0B0F10', teal: '#0E9A94' },
-  minDuration: 2800,
-  reducedMotionDuration: 700,
-  maxDuration: 4500,
+  minDuration: 1500,
+  reducedMotionDuration: 450,
+  maxDuration: 2600,
   logoWidth: 'clamp(160px, 28vw, 340px)',
 };
 
 const particleCount = typeof window !== 'undefined' && window.innerWidth < 600 ? 14 : 26;
-
-function waitForWindowLoad() {
-  if (document.readyState === 'complete') return Promise.resolve();
-  return new Promise((resolve) => window.addEventListener('load', resolve, { once: true }));
-}
 
 function preloadImage(source) {
   return new Promise((resolve) => {
@@ -82,10 +77,9 @@ export default function Preloader({ logoSrc, onComplete }) {
       window.setTimeout(onComplete, reducedMotion ? 350 : 800);
     };
     const imageReady = preloadImage(logoSrc);
-    const pageReady = waitForWindowLoad();
     const minimumReady = new Promise((resolve) => window.setTimeout(resolve, duration));
     const finishWhenReady = async () => {
-      await Promise.race([Promise.all([imageReady, pageReady, minimumReady]), new Promise((resolve) => window.setTimeout(resolve, PRELOADER_CONFIG.maxDuration))]);
+      await Promise.race([Promise.all([imageReady, minimumReady]), new Promise((resolve) => window.setTimeout(resolve, PRELOADER_CONFIG.maxDuration))]);
       complete();
     };
     finishWhenReady();
