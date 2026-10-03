@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, Check, Copy, Facebook, GraduationCap, HeartHandshake, Instagram, Laptop, Linkedin, Mail, MapPin, Menu, Phone, Search, ShieldCheck, Shirt, Utensils, UsersRound, X } from 'lucide-react';
+import { ArrowRight, Check, Copy, GraduationCap, HeartHandshake, Laptop, Mail, MapPin, Menu, Moon, Phone, Search, ShieldCheck, Shirt, Sun, Utensils, UsersRound, X } from 'lucide-react';
 import { Link, Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import { donation, foundation, focusAreas, gallery, impactStats, news, projects, team } from './data/content';
 import { googleMapsUrl, LOCATION } from './data/location';
 import HeroSlideshow from './components/HeroSlideshow';
@@ -11,11 +15,14 @@ import OptimizedImage from './components/OptimizedImage';
 import SocialLinks from './components/SocialLinks';
 import Preloader from './components/Preloader';
 
+L.Icon.Default.mergeOptions({ iconRetinaUrl: markerIcon2x, iconUrl: markerIcon, shadowUrl: markerShadow });
+
 const icons = { GraduationCap, Laptop, HeartHandshake, UsersRound, Utensils, Shirt, ShieldCheck };
 const Icon = ({ name, size = 22 }) => { const Component = icons[name] || HeartHandshake; return <Component size={size} strokeWidth={1.8} aria-hidden="true" />; };
 
 function Header() {
   const [open, setOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   useEffect(() => {
     const closeOnEscape = (event) => { if (event.key === 'Escape') setOpen(false); };
@@ -24,7 +31,7 @@ function Header() {
   }, []);
   const links = [['Home', '/'], ['About', '/about'], ['Projects', '/projects'], ['Gallery', '/gallery'], ['News', '/news'], ['Impact', '/impact'], ['Contact', '/contact']];
   const active = (path) => path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
-  return <header className="site-header"><div className="container nav-inner"><Link className="brand" to="/" onClick={() => setOpen(false)}><img src={foundation.logo} alt="Baqiatullah Foundation logo" width="52" height="52" /><span><strong>BAQIATULLAH</strong><small>FOUNDATION PAKISTAN</small></span></Link><nav className="desktop-nav" aria-label="Main navigation">{links.map(([label, path]) => <Link className={active(path) ? 'active' : ''} key={path} to={path}>{label}</Link>)}</nav><div className="nav-actions"><Link className="button button-small" to="/donate">Donate now <ArrowRight size={16} /></Link><button className="menu-button" type="button" onClick={() => setOpen(true)} aria-label="Open navigation" aria-expanded={open}><Menu size={22} /></button></div></div>{open && <div className="mobile-overlay" onClick={() => setOpen(false)}><aside className="mobile-menu" onClick={(event) => event.stopPropagation()} aria-label="Mobile navigation"><div className="mobile-menu-head"><Link className="brand" to="/" onClick={() => setOpen(false)}><img src={foundation.logo} alt="Baqiatullah Foundation logo" width="52" height="52" /><span><strong>BAQIATULLAH</strong><small>FOUNDATION PAKISTAN</small></span></Link><button className="icon-button" type="button" onClick={() => setOpen(false)} aria-label="Close navigation"><X /></button></div><nav>{links.concat([['Donate', '/donate']]).map(([label, path]) => <Link className={active(path) ? 'active' : ''} key={path} to={path} onClick={() => setOpen(false)}>{label}<ArrowRight size={16} /></Link>)}</nav></aside></div>}</header>;
+  return <header className="site-header"><div className="container nav-inner"><Link className="brand" to="/" onClick={() => setOpen(false)}><img src={foundation.logo} alt="Baqiatullah Foundation logo" width="52" height="52" /><span><strong>BAQIATULLAH</strong><small>FOUNDATION PAKISTAN</small></span></Link><nav className="desktop-nav" aria-label="Main navigation">{links.map(([label, path]) => <Link className={active(path) ? 'active' : ''} key={path} to={path}>{label}</Link>)}</nav><div className="nav-actions"><button className="icon-button theme-toggle" type="button" onClick={toggleTheme} aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`} title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}>{theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}</button><Link className="button button-small" to="/donate">Donate now <ArrowRight size={16} /></Link><button className="menu-button" type="button" onClick={() => setOpen(true)} aria-label="Open navigation" aria-expanded={open}><Menu size={22} /></button></div></div>{open && <div className="mobile-overlay" onClick={() => setOpen(false)}><aside className="mobile-menu" onClick={(event) => event.stopPropagation()} aria-label="Mobile navigation"><div className="mobile-menu-head"><Link className="brand" to="/" onClick={() => setOpen(false)}><img src={foundation.logo} alt="Baqiatullah Foundation logo" width="52" height="52" /><span><strong>BAQIATULLAH</strong><small>FOUNDATION PAKISTAN</small></span></Link><button className="icon-button" type="button" onClick={() => setOpen(false)} aria-label="Close navigation"><X /></button></div><nav>{links.concat([['Donate', '/donate']]).map(([label, path]) => <Link className={active(path) ? 'active' : ''} key={path} to={path} onClick={() => setOpen(false)}>{label}<ArrowRight size={16} /></Link>)}</nav></aside></div>}</header>;
 }
 
 function Footer() { return <footer><div className="container footer-grid"><div className="footer-about"><Link className="brand" to="/"><img src={foundation.logo} alt="Baqiatullah Foundation logo" width="52" height="52" /><span><strong>BAQIATULLAH</strong><small>FOUNDATION PAKISTAN</small></span></Link><p>Building brighter futures for children through compassionate care, education, digital opportunity, and community support.</p><SocialLinks /></div><div className="footer-column"><h4>Explore</h4>{[['Home', '/'], ['About', '/about'], ['Projects', '/projects'], ['Gallery', '/gallery'], ['News', '/news'], ['Impact', '/impact']].map(([label, path]) => <Link key={path} to={path}>{label}</Link>)}</div><div className="footer-column"><h4>Focus areas</h4>{focusAreas.map((area) => <Link key={area.title} to="/projects">{area.title}</Link>)}</div><div className="footer-column footer-contact"><h4>Contact</h4><p>{foundation.address}</p><a href={`tel:${foundation.phoneRaw}`}>{foundation.phone}</a><a href={`mailto:${foundation.email}`}>{foundation.email}</a></div></div><div className="container footer-bottom"><span>© 2026 Baqiatullah Foundation Pakistan</span><Link to="/donate">Support the mission <ArrowRight size={14} /></Link></div></footer>; }

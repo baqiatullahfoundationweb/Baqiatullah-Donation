@@ -8,9 +8,18 @@ export default function OptimizedImage({
   priority = false,
   sizes = '100vw',
   className = '',
+  fallbackSrc,
   ...props
 }) {
+  const isFoundationGalleryImage = src.includes('www.baqiatullah.org/gallery/');
+  const proxyOriginal = src.includes('images.weserv.nl/?url=')
+    ? decodeURIComponent(new URL(src).searchParams.get('url') || '')
+    : undefined;
+  const optimizedSrc = isFoundationGalleryImage
+    ? `https://images.weserv.nl/?url=${encodeURIComponent(src)}&w=900&output=webp&q=78`
+    : src;
   const [loaded, setLoaded] = useState(false);
+  const [currentSrc, setCurrentSrc] = useState(optimizedSrc);
   const [failed, setFailed] = useState(false);
 
   return (
@@ -24,7 +33,7 @@ export default function OptimizedImage({
         <img
           {...props}
           className={className}
-          src={src}
+          src={currentSrc}
           alt={alt}
           width={width}
           height={height}
@@ -33,7 +42,14 @@ export default function OptimizedImage({
           fetchpriority={priority ? 'high' : 'auto'}
           decoding="async"
           onLoad={() => setLoaded(true)}
-          onError={() => setFailed(true)}
+          onError={() => {
+            const originalSrc = fallbackSrc || proxyOriginal || (isFoundationGalleryImage ? src : undefined);
+            if (originalSrc && currentSrc !== originalSrc) {
+              setCurrentSrc(originalSrc);
+              return;
+            }
+            setFailed(true);
+          }}
         />
       )}
     </span>

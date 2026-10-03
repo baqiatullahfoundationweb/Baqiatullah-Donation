@@ -9,6 +9,7 @@ img { display: block; max-width: 100%; }
 :focus-visible { outline: 3px solid rgba(255, 191, 0, .8); outline-offset: 3px; }
 .container { width: min(1160px, calc(100% - 48px)); margin: auto; }
 .site-header { position: sticky; top: 0; z-index: 30; background: rgba(255,255,255,.94); border-bottom: 1px solid var(--border); backdrop-filter: blur(16px); }
+[data-theme='dark'] .site-header { background: rgba(7,31,31,.94); }
 .nav-inner { min-height: 84px; display: flex; align-items: center; gap: 28px; justify-content: space-between; }
 .brand { display: inline-flex; align-items: center; gap: 11px; color: var(--color-deep); }
 .brand img { width: 52px; height: 52px; object-fit: contain; }
@@ -22,6 +23,7 @@ img { display: block; max-width: 100%; }
 .button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 13px 19px; border: 0; border-radius: 5px; background: var(--primary); color: white; font-weight: 700; font-size: 13px; box-shadow: 0 8px 20px rgba(0, 139, 139, .18); transition: transform .2s, background .2s, box-shadow .2s; }
 .button:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0, 139, 139, .25); }
 .button-small { padding: 11px 15px; }
+.theme-toggle { color: var(--primary-dark); }
 .button-light { background: white; color: var(--color-deep); }
 .menu-button, .icon-button { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--border); border-radius: 5px; background: transparent; }
 .menu-button { display: none; }
@@ -147,6 +149,7 @@ h3 { line-height: 1.25; }
 .project-icon { transition: transform .3s var(--ease-out), background .3s, color .3s; }
 
 footer { margin-top: 0; border-top: 5px solid var(--color-gold); background: #edf3f0; color: var(--color-deep); }
+[data-theme='dark'] footer { background: var(--surface); color: var(--text); }
 .footer-grid { display: grid; grid-template-columns: minmax(260px, 1.45fr) repeat(3, 1fr); gap: 52px; padding: 66px 0 54px; }
 .footer-about { min-width: 0; }
 .footer-about .brand { margin-bottom: 22px; }

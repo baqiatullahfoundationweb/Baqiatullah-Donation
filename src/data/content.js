@@ -50,7 +50,10 @@ export const team = [
   { name: 'Sohail Raza', role: 'Finance Secretary', image: 'https://www.baqiatullah.org/team/finance.jpg' },
 ];
 
-const foundationGalleryImage = (number) => `https://www.baqiatullah.org/gallery/${number}.jpg`;
+const foundationGalleryImage = (number) => {
+  const original = `https://www.baqiatullah.org/gallery/${number}.jpg`;
+  return `https://images.weserv.nl/?url=${encodeURIComponent(original)}&w=900&output=webp&q=78`;
+};
 
 export const gallery = [
   [1, 'Education', 'Children learning together'],
